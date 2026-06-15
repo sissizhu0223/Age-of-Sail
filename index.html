@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Age of Sail: Immortal Voyages | Columbus, da Gama, Vespucci, Magellan</title>
+    <title>Age of Sail: True Columbus Route | Dynamic Winds</title>
     <!-- Leaflet Real Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
         }
         body {
             margin: 0;
             min-height: 100vh;
             background: #0a1f2e;
-            font-family: 'Segoe UI', 'Georgia', 'Times New Roman', serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,31 +27,13 @@
             background: #1e2c2acc;
             backdrop-filter: blur(2px);
             border-radius: 48px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.6);
             padding: 20px;
             border: 1px solid #c9b16b;
+            position: relative;
         }
-        .map-area {
-            background: #0a1a1f;
-            border-radius: 32px;
-            padding: 8px;
-            box-shadow: inset 0 0 12px #00000044, 0 8px 18px black;
-        }
-        #realMap {
-            height: 480px;
-            width: 100%;
-            border-radius: 24px;
-            background: #c8e0e8;
-            z-index: 1;
-        }
-        .dashboard {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 24px;
-            margin-bottom: 20px;
-            justify-content: space-between;
-        }
+        .map-area { background: #0a1a1f; border-radius: 32px; padding: 8px; }
+        #realMap { height: 500px; width: 100%; border-radius: 24px; background: #c8e0e8; }
+        .dashboard { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 24px; margin-bottom: 20px; }
         .stats-panel {
             background: #040f16dd;
             backdrop-filter: blur(8px);
@@ -62,25 +44,9 @@
             border-left: 6px solid #e6b450;
             color: #f4ecd8;
         }
-        .stats-panel h3 {
-            margin: 0 0 8px 0;
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            color: #ffdd99;
-        }
-        .stats-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-        .stat {
-            background: #00000077;
-            padding: 4px 12px;
-            border-radius: 40px;
-        }
-        /* Fixed: Date panel - bright text for readability */
+        .stats-panel h3 { margin: 0 0 8px 0; letter-spacing: 2px; font-size: 1.2rem; color: #ffdd99; }
+        .stats-grid { display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; font-weight: bold; }
+        .stat { background: #00000077; padding: 4px 12px; border-radius: 40px; }
         .date-panel {
             background: #2c241ae6;
             border-radius: 28px;
@@ -90,14 +56,10 @@
             font-weight: bold;
             font-size: 1rem;
             border-right: 3px solid #e6b450;
-            color: #FFE6C7;  /* bright warm tone */
+            color: #FFE6C7;
             text-shadow: 0 0 4px #00000080;
         }
-        .date-panel span {
-            color: #FFD966;
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
+        .date-panel span { color: #FFD966; font-size: 1.1rem; font-family: monospace; }
         .decision-panel {
             background: #231f1bb3;
             backdrop-filter: blur(8px);
@@ -105,26 +67,11 @@
             padding: 12px 24px;
             flex: 3;
             min-width: 280px;
-            color: #FEF3D6; /* enhanced readability */
+            color: #FEF3D6;
         }
-        .decision-title {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #FFD966;  /* bright gold instead of dark */
-            margin-bottom: 8px;
-            text-shadow: 0 1px 2px black;
-        }
-        #decisionText {
-            color: #FFEFC0;
-            font-weight: 500;
-            text-shadow: 0 1px 1px #00000070;
-        }
-        .decision-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 8px;
-        }
+        .decision-title { font-weight: bold; font-size: 1.2rem; color: #FFD966; margin-bottom: 8px; text-shadow: 0 1px 2px black; }
+        #decisionText { color: #FFEFC0; font-weight: 500; text-shadow: 0 1px 1px #00000070; }
+        .decision-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
         button {
             background: #2e241f;
             border: 1px solid #c7a25b;
@@ -134,57 +81,54 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-family: inherit;
             font-size: 0.8rem;
+            font-family: 'Arial', sans-serif;
         }
-        button:hover {
-            background: #5e3a28;
-            border-color: #f5bc70;
-            transform: scale(0.97);
-        }
+        button:hover { background: #5e3a28; border-color: #f5bc70; transform: scale(0.97); }
         .log-area {
             background: #030e0cee;
             border-radius: 24px;
             padding: 12px 18px;
             margin-top: 20px;
             color: #bbd4ce;
-            font-family: monospace;
+            font-family: 'Arial', monospace;
             font-size: 0.78rem;
-            max-height: 150px;
+            max-height: 140px;
             overflow-y: auto;
             border-top: 2px solid #c0a45a;
         }
-        .event-message {
-            margin: 4px 0;
-            border-left: 3px solid #dba545;
-            padding-left: 10px;
+        .event-message { margin: 4px 0; border-left: 3px solid #dba545; padding-left: 10px; font-family: 'Arial', sans-serif; }
+        .reset-btn { background: #6a2e2e; border-color: #bc8f6b; }
+        .bottom-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 12px;
+            gap: 15px;
         }
-        .reset-btn {
-            background: #6a2e2e;
-            border-color: #bc8f6b;
-            float: right;
+        .music-control {
+            background: #000000aa;
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            padding: 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #c7a25b;
         }
-        .fleet-badge {
-            background: #2a4b5e;
-            border-radius: 20px;
-            padding: 2px 10px;
-            font-size: 0.8rem;
-        }
-        @media (max-width: 800px) {
-            .dashboard { flex-direction: column; }
+        .music-control button { background: #1e1a15; padding: 4px 12px; font-size: 0.75rem; margin: 0; }
+        .music-control span { color: #FFD966; font-size: 0.8rem; }
+        @media (max-width: 800px) { 
+            .dashboard { flex-direction: column; } 
             button { padding: 5px 10px; font-size: 0.7rem; }
+            .bottom-bar { justify-content: space-between; }
         }
-        /* Additional fix for any dark text */
-        .stats-panel, .stats-panel .stat, .stats-panel span {
-            color: #F9EED9;
-        }
+        .wind-label { font-weight: bold; background: #fdf8e7; border-radius: 20px; padding: 2px 8px; border: 1px solid #b68b40; white-space: nowrap; font-size: 10px; }
     </style>
 </head>
 <body>
 <div class="game-container">
-    <div class="map-area">
-        <div id="realMap"></div>
-    </div>
+    <div class="map-area"><div id="realMap"></div></div>
     <div class="dashboard">
         <div class="stats-panel">
             <h3>⚓ EXPEDITION FLEET ⚓</h3>
@@ -195,86 +139,133 @@
                 <div class="stat">❤️ Scurvy: <span id="scurvyVal">0</span>%</div>
                 <div class="stat">🚢 Ships: <span id="shipCount">3</span></div>
                 <div class="stat">👨‍✈️ Crew: <span id="totalCrew">90</span></div>
-                <div class="stat">📍 Position: <span id="positionLabel">Palos de la Frontera</span></div>
+                <div class="stat">📍 Position: <span id="positionLabel">Palos, Spain</span></div>
                 <div class="stat">🌊 Wind/Current: <span id="currentWind">N.E. Trade Winds (Fair)</span></div>
             </div>
         </div>
-        <div class="date-panel">
-            📅 REAL DATE<br>
-            <span id="gameDateDisplay">August 3, 1492</span>
-        </div>
+        <div class="date-panel">📅 REAL DATE<br><span id="gameDateDisplay">August 3, 1492</span></div>
         <div class="decision-panel">
             <div class="decision-title">📜 CAPTAIN'S COUNCIL · CHOICES SHAPE DESTINY</div>
-            <div id="decisionText">Select route, trade, or treat sickness. Monsoons & mutiny threaten survival.</div>
+            <div id="decisionText">Select route, trade, or boost morale. Winds change with seasons!</div>
             <div class="decision-buttons" id="decisionButtons"></div>
         </div>
     </div>
     <div class="log-area" id="logMessages">
-        <div class="event-message">✨ AGE OF SAIL: Scurvy, Mutiny, Trade Conflicts & Real Geography.</div>
-        <div class="event-message">✨ Every decision impacts morale, supplies, and historical victory.</div>
+        <div class="event-message">✨ CORRECT COLUMBUS ROUTE: Palos → Canary Islands → DIRECTLY across Atlantic to San Salvador (Bahamas). NO Cape Verde stop.</div>
+        <div class="event-message">🌊 DYNAMIC WINDS: Trade winds stronger Nov-Mar, Monsoon reversal in Indian Ocean. Check conditions before sailing!</div>
     </div>
-    <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+    <div class="bottom-bar">
+        <div style="flex:1"></div>
         <button id="resetGameBtn" class="reset-btn">🔄 RESTART VOYAGE</button>
+        <div class="music-control"><span>🎵</span><button id="toggleMusicBtn">🔊 Music On</button></div>
     </div>
 </div>
 
 <script>
     (function() {
-        // ---------- REAL GEOGRAPHICAL WAYPOINTS (Lat/Lng) ----------
+        // ---------- MUSIC ----------
+        const audio = new Audio('https://assets.mixkit.co/music/preview/mixkit-sea-breeze-1230.mp3');
+        audio.loop = true;
+        audio.volume = 0.35;
+        let musicPlaying = false;
+        function toggleMusic() {
+            if (musicPlaying) { audio.pause(); musicPlaying = false; document.getElementById('toggleMusicBtn').innerHTML = '🔇 Music Off'; } 
+            else { audio.play().catch(e=>console.log(e)); musicPlaying = true; document.getElementById('toggleMusicBtn').innerHTML = '🔊 Music On'; }
+        }
+        function enableAudioOnFirstInteraction() {
+            if (!musicPlaying) { audio.play().then(()=>{ musicPlaying=true; document.getElementById('toggleMusicBtn').innerHTML='🔊 Music On'; }).catch(()=>{}); }
+            document.removeEventListener('click', enableAudioOnFirstInteraction);
+        }
+        document.addEventListener('click', enableAudioOnFirstInteraction);
+        
+        // ---------- HISTORICAL WAYPOINTS (Columbus: NO Cape Verde. Canary → San Salvador directly) ----------
         const waypoints = [
-            { id: 0, name: "Palos, Spain", lat: 37.234, lng: -6.896, region: "Iberia", windZone: "Westerlies", baseWindEffect: 0, tradeType: "European Port" },
-            { id: 1, name: "Canary Islands", lat: 28.268, lng: -15.606, region: "NW Africa", windZone: "N.E. Trade Winds", baseWindEffect: 0.2, tradeType: "Resupply Outpost" },
-            { id: 2, name: "Cape Verde", lat: 14.933, lng: -23.513, region: "West Africa", windZone: "Strong N.E. Trades", baseWindEffect: 0.25, tradeType: "Portuguese Factory" },
-            { id: 3, name: "Brazil Coast (Recife)", lat: -8.047, lng: -34.877, region: "South America", windZone: "S.E. Trade Winds", baseWindEffect: 0.15, tradeType: "Indigenous Trade" },
-            { id: 4, name: "Caribbean (Hispaniola)", lat: 19.0, lng: -70.667, region: "Americas", windZone: "Easterlies", baseWindEffect: 0.2, tradeType: "New World" },
-            { id: 5, name: "Cape of Good Hope", lat: -34.358, lng: 18.471, region: "South Africa", windZone: "Roaring Forties", baseWindEffect: -0.2, tradeType: "Barren Cape" },
-            { id: 6, name: "Calicut, India", lat: 11.258, lng: 75.78, region: "India", windZone: "Monsoon Currents", baseWindEffect: 0.25, tradeType: "Arab Merchant Hub" },
-            { id: 7, name: "Malacca", lat: 2.189, lng: 102.249, region: "Southeast Asia", windZone: "Monsoon Reversal", baseWindEffect: -0.05, tradeType: "Asian Trade Port" },
-            { id: 8, name: "Spice Islands (Ternate)", lat: 0.789, lng: 127.381, region: "Moluccas", windZone: "Doldrums", baseWindEffect: -0.25, tradeType: "Spice Archipelago" },
-            { id: 9, name: "Strait of Magellan", lat: -53.5, lng: -70.5, region: "Patagonia", windZone: "Furious Westerlies", baseWindEffect: -0.35, tradeType: "Treacherous Fjord" },
-            { id: 10, name: "Guam", lat: 13.444, lng: 144.793, region: "Pacific", windZone: "Trade Winds", baseWindEffect: 0.1, tradeType: "Chamorro Territory" },
-            { id: 11, name: "Philippines (Cebu)", lat: 10.296, lng: 123.885, region: "Asia", windZone: "S.W. Monsoon", baseWindEffect: 0.15, tradeType: "Spanish Outpost" }
+            { id: 0, name: "Palos, Spain", lat: 37.234, lng: -6.896, region: "Europe", power: "Spanish", conflictZone: "none", windZone: "Westerlies", baseWindEffect: 0, tradeType: "home" },
+            { id: 1, name: "Canary Islands", lat: 28.268, lng: -15.606, region: "Atlantic", power: "Spanish", conflictZone: "none", windZone: "N.E. Trade Winds", baseWindEffect: 0.22, tradeType: "spanish_outpost" },
+            // Columbus's true first landfall: DIRECT from Canary to San Salvador (NO intermediate)
+            { id: 2, name: "San Salvador (Bahamas)", lat: 24.1, lng: -74.5, region: "Caribbean", power: "Lucayan Taino", conflictZone: "indigenous_americas", windZone: "Easterlies", baseWindEffect: 0.2, historicalNote: "First landfall Oct 12, 1492" },
+            { id: 3, name: "Hispaniola (Santo Domingo)", lat: 18.5, lng: -69.9, region: "Americas", power: "Taino", conflictZone: "indigenous_americas", windZone: "Easterlies", baseWindEffect: 0.18, historicalNote: "La Navidad settlement" },
+            // Africa & India routes (da Gama & others)
+            { id: 4, name: "Cape Verde", lat: 14.933, lng: -23.513, region: "West Africa", power: "Portuguese", conflictZone: "portuguese_africa", windZone: "Strong N.E. Trades", baseWindEffect: 0.25 },
+            { id: 5, name: "Cape of Good Hope", lat: -34.358, lng: 18.471, region: "South Africa", power: "Khoisan", conflictZone: "none", windZone: "Roaring Forties", baseWindEffect: -0.2 },
+            { id: 6, name: "Calicut, India", lat: 11.258, lng: 75.78, region: "India", power: "Zamorin/Arab", conflictZone: "indian_ocean_rivalry", windZone: "Monsoon Currents", baseWindEffect: 0.25 },
+            { id: 7, name: "Malacca", lat: 2.189, lng: 102.249, region: "Southeast Asia", power: "Malay Sultanate", conflictZone: "asian_trade_rivalry", windZone: "Monsoon Reversal", baseWindEffect: -0.05 },
+            { id: 8, name: "Spice Islands (Ternate)", lat: 0.789, lng: 127.381, region: "Moluccas", power: "Ternate Sultanate", conflictZone: "asian_trade_rivalry", windZone: "Doldrums", baseWindEffect: -0.25 },
+            { id: 9, name: "Strait of Magellan", lat: -53.5, lng: -70.5, region: "Patagonia", power: "indigenous", conflictZone: "indigenous_americas", windZone: "Furious Westerlies", baseWindEffect: -0.35 },
+            { id: 10, name: "Guam", lat: 13.444, lng: 144.793, region: "Pacific", power: "Chamorro", conflictZone: "pacific_conflict", windZone: "Trade Winds", baseWindEffect: 0.1 },
+            { id: 11, name: "Philippines (Cebu)", lat: 10.296, lng: 123.885, region: "Asia", power: "Rajahnate of Cebu", conflictZone: "asian_trade_rivalry", windZone: "S.W. Monsoon", baseWindEffect: 0.15 },
+            { id: 12, name: "Canoeiro Coast (Venezuela)", lat: 10.5, lng: -67.5, region: "South America", power: "Indigenous", conflictZone: "indigenous_americas", windZone: "Easterlies", baseWindEffect: 0.1 },
+            { id: 13, name: "Rio de la Plata", lat: -34.9, lng: -56.2, region: "South America", power: "Charrua", conflictZone: "indigenous_americas", windZone: "S.E. Trades", baseWindEffect: -0.05 }
         ];
 
-        // Historical mainline objectives
+        // Captain historical targets: Columbus = San Salvador & Hispaniola
         const voyages = {
-            "Columbus": { startId: 0, targetIds: [4], startDate: new Date(1492, 7, 3), startShips: 3, startCrew: 90, endMessage: "October 12, 1492 — You reached the Americas, changing the world forever." },
-            "da Gama": { startId: 0, targetIds: [6], startDate: new Date(1497, 6, 8), startShips: 4, startCrew: 170, endMessage: "May 20, 1498 — You arrived in Calicut, opening the sea route to India." },
-            "Amerigo": { startId: 1, targetIds: [3,4], startDate: new Date(1501, 4, 10), startShips: 2, startCrew: 60, endMessage: "You confirmed a 'New World' — the continent named after you." },
-            "Magellan": { startId: 0, targetIds: [9,8,11], startDate: new Date(1519, 8, 20), startShips: 5, startCrew: 270, endMessage: "1522 — The first circumnavigation of Earth completed! Immortal glory." }
+            "Columbus": { startId: 0, targetIds: [2, 3], startDate: new Date(1492, 7, 3), startShips: 3, startCrew: 90, endMessage: "October 12, 1492 — Landfall at San Salvador! You opened the Americas to Europe." },
+            "da Gama": { startId: 0, targetIds: [6], startDate: new Date(1497, 6, 8), startShips: 4, startCrew: 170, endMessage: "May 20, 1498 — Calicut reached. The sea route to India is open." },
+            "Amerigo": { startId: 1, targetIds: [12, 13], startDate: new Date(1499, 4, 16), startShips: 2, startCrew: 55, endMessage: "You mapped the South American coast. The continent is named America after you." },
+            "Magellan": { startId: 0, targetIds: [9, 8, 11], startDate: new Date(1519, 8, 20), startShips: 5, startCrew: 270, endMessage: "1522 — First circumnavigation completed. Immortal glory!" }
         };
 
-        // ---------- GAME STATE ----------
         let currentCaptain = "Columbus";
         let currentWaypointId = 0;
-        let morale = 80;
-        let supply = 85;
-        let scurvy = 0;
-        let ships = 3;
-        let totalCrew = 90;
-        let gameActive = true;
-        let gameWin = false;
+        let morale = 80, supply = 85, scurvy = 0, ships = 3, totalCrew = 90;
+        let gameActive = true, gameWin = false;
         let gameDate = new Date(1492, 7, 3);
-        
         let map = null, currentMarker = null;
         
-        function formatDate(date) { return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+        function formatDate(d) { return d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }); }
         
-        // Seasonal wind & monsoon realism
-        function getSeasonalWindModifier(waypoint) {
-            const month = gameDate.getMonth();
-            if (waypoint.windZone.includes("Trade")) return 0.05;
-            if (waypoint.windZone.includes("Roaring") && waypoint.id === 5) return (month>=4 && month<=7) ? -0.25 : -0.1;
-            if (waypoint.windZone.includes("Monsoon") && waypoint.id === 6) {
-                if (month>=5 && month<=8) return 0.35;
-                if (month>=11 || month<=1) return 0.2;
-                return -0.1;
+        // ---------- DYNAMIC WIND SYSTEM (Realistic seasonal variation) ----------
+        function getDynamicWindEffect(waypoint) {
+            const month = gameDate.getMonth(); // 0-11
+            const base = waypoint.baseWindEffect || 0;
+            const windZone = waypoint.windZone;
+            
+            // Atlantic Trade Winds: stronger in winter (Nov-Mar)
+            if (windZone.includes("Trade Winds") || windZone.includes("Easterlies")) {
+                if (month >= 10 || month <= 1) return base + 0.12;  // Stronger trades
+                if (month >= 5 && month <= 8) return base - 0.05;   // Summer lull
+                return base;
             }
-            if (waypoint.windZone.includes("Doldrums")) return -0.2;
-            if (waypoint.windZone.includes("Furious")) return (month>=4 && month<=9) ? -0.4 : -0.2;
-            return waypoint.baseWindEffect || 0;
+            // Westerlies & Roaring Forties: stronger in southern winter (June-Aug)
+            if (windZone.includes("Roaring Forties") || windZone.includes("Westerlies")) {
+                if (month >= 5 && month <= 7) return base - 0.22;
+                return base - 0.1;
+            }
+            // Indian Ocean Monsoon: dramatic reversal
+            if (windZone.includes("Monsoon")) {
+                if (month >= 4 && month <= 8) return 0.32;   // Southwest Monsoon
+                if (month >= 10 || month <= 1) return 0.20;  // Northeast Monsoon
+                return -0.15; // Intermonsoon
+            }
+            // Doldrums (ITCZ): always adverse, worse in summer
+            if (windZone.includes("Doldrums")) {
+                if (month >= 5 && month <= 9) return -0.32;
+                return -0.2;
+            }
+            // Furious Westerlies (Magellan Strait)
+            if (windZone.includes("Furious")) {
+                if (month >= 5 && month <= 8) return -0.48;
+                return -0.32;
+            }
+            // Strong N.E. Trades (Cape Verde)
+            if (windZone.includes("Strong")) {
+                if (month >= 10 || month <= 2) return base + 0.1;
+                return base;
+            }
+            return base;
         }
-        function getFinalWindEffect(waypoint) { return (waypoint.baseWindEffect||0) + getSeasonalWindModifier(waypoint); }
+        
+        function getFinalWindEffect(wp) { return getDynamicWindEffect(wp); }
+        
+        function getWindDescription(wp) {
+            const eff = getFinalWindEffect(wp);
+            if (eff >= 0.2) return "🏄 Strong favorable winds!";
+            if (eff >= 0.05) return "🌬️ Light favorable breeze";
+            if (eff >= -0.05) return "⚖️ Variable winds, moderate";
+            if (eff >= -0.2) return "🐢 Adverse winds, slow";
+            return "⛈️ Severe headwinds / Calms! High risk";
+        }
         
         function updateUI() {
             document.getElementById("moraleVal").innerText = Math.floor(morale);
@@ -284,270 +275,201 @@
             document.getElementById("totalCrew").innerText = Math.floor(totalCrew);
             document.getElementById("captainName").innerText = currentCaptain;
             const wp = waypoints.find(w=>w.id===currentWaypointId);
-            if(wp) document.getElementById("positionLabel").innerText = wp.name;
-            let eff = getFinalWindEffect(wp);
-            let windDesc = `${wp.windZone} (${eff>0?"Fair winds":eff<0?"Adverse/Calms":"Moderate"})`;
-            document.getElementById("currentWind").innerHTML = windDesc;
+            if(wp) {
+                document.getElementById("positionLabel").innerText = wp.name;
+                let desc = getWindDescription(wp);
+                let windText = `${wp.windZone} ${desc}`;
+                document.getElementById("currentWind").innerHTML = windText;
+            }
             document.getElementById("gameDateDisplay").innerText = formatDate(gameDate);
             if(map && currentMarker) map.removeLayer(currentMarker);
-            if(map && wp) {
-                currentMarker = L.marker([wp.lat, wp.lng]).bindPopup(`🚢 ${currentCaptain}'s Fleet<br>Crew:${Math.floor(totalCrew)} Ships:${ships}`).addTo(map);
-                map.setView([wp.lat, wp.lng], 5);
-            }
+            if(map && wp) { currentMarker = L.marker([wp.lat, wp.lng]).bindPopup(`🚢 ${currentCaptain}<br>Crew:${Math.floor(totalCrew)}<br>${getWindDescription(wp)}`).addTo(map); map.setView([wp.lat, wp.lng], 5); }
         }
         
         function addLog(msg, isError=false) {
             const logDiv = document.getElementById("logMessages");
-            const entry = document.createElement("div");
-            entry.className = "event-message";
+            const entry = document.createElement("div"); entry.className = "event-message";
             entry.style.color = isError ? "#ffaa88" : "#cbe5e0";
-            entry.innerHTML = `⛵ ${msg}`;
-            logDiv.appendChild(entry);
-            logDiv.scrollTop = logDiv.scrollHeight;
+            entry.innerHTML = `⛵ ${msg}`; logDiv.appendChild(entry); logDiv.scrollTop = logDiv.scrollHeight;
         }
         
-        // Advance days: scurvy increase, morale fatigue, mutiny risk
         function advanceDays(days) {
-            let newDate = new Date(gameDate);
-            newDate.setDate(gameDate.getDate() + days);
-            gameDate = newDate;
-            let scurvyIncrease = days * 0.55;
-            scurvy = Math.min(95, scurvy + scurvyIncrease);
-            let moraleFatigue = days / 11;
-            morale = Math.max(0, morale - moraleFatigue);
-            // Scurvy crew loss
-            if(scurvy > 40) {
-                let loss = Math.floor((scurvy-40)/16 * days) + 1;
-                loss = Math.min(loss, totalCrew-1);
-                if(loss>0) {
-                    totalCrew -= loss;
-                    addLog(`💀 Scurvy ravages the fleet! ${loss} sailors dead. Morale drops.`, true);
-                    morale -= 5;
-                }
+            let newDate = new Date(gameDate); newDate.setDate(gameDate.getDate() + days); gameDate = newDate;
+            scurvy = Math.min(95, scurvy + days*0.55);
+            morale = Math.max(0, morale - days/11);
+            if(scurvy > 40) { let loss = Math.floor((scurvy-40)/16 * days)+1; loss = Math.min(loss, totalCrew-1); if(loss>0) { totalCrew -= loss; addLog(`💀 Scurvy kills ${loss}.`, true); morale -= 5; } }
+            if(morale <= 20 && gameActive && !gameWin && Math.random()<0.4) {
+                addLog(`🔱 MUTINY! Ships & crew lost!`, true);
+                let lostShips = Math.max(1, Math.floor(ships*0.4)); let lostCrew = Math.floor(totalCrew*0.3);
+                ships -= lostShips; totalCrew -= lostCrew; morale = Math.max(0, morale-15);
+                if(ships<=0 || totalCrew<=5) gameActive = false;
             }
-            // Low morale -> mutiny / internal strife
-            if(morale <= 20 && gameActive && !gameWin) {
-                if(Math.random() < 0.4) {
-                    addLog(`🔱 MUTINY! Prolonged voyage sparks rebellion. Ships and crew lost!`, true);
-                    let lostShips = Math.max(1, Math.floor(ships * 0.4));
-                    let lostCrew = Math.floor(totalCrew * 0.3);
-                    ships -= lostShips;
-                    totalCrew -= lostCrew;
-                    morale = Math.max(0, morale - 15);
-                    if(ships <= 0 || totalCrew <= 5) gameActive = false;
-                }
-            }
-            morale = Math.min(100, Math.max(0, morale));
-            supply = Math.min(100, Math.max(0, supply));
-            scurvy = Math.min(100, Math.max(0, scurvy));
+            morale = Math.min(100, Math.max(0,morale)); supply = Math.min(100, Math.max(0,supply)); scurvy = Math.min(100, Math.max(0,scurvy));
             totalCrew = Math.max(0, Math.floor(totalCrew));
-            if(totalCrew <= 0 || ships <= 0 || supply <= 1) gameActive = false;
+            if(totalCrew<=0 || ships<=0 || supply<=1) gameActive = false;
         }
         
-        // Trade / resupply with conflict events (Portuguese/Arabs)
+        function resolveConflict(wp) {
+            if(wp.conflictZone==="indian_ocean_rivalry" && Math.random()<0.48) { let loss=Math.floor(Math.random()*(totalCrew*0.22))+4; totalCrew-=loss; morale-=7; addLog(`⚔️ Indian Ocean conflict! Lost ${loss} crew.`,true); return true; }
+            if(wp.conflictZone==="asian_trade_rivalry" && Math.random()<0.45) { let loss=Math.floor(Math.random()*(totalCrew*0.2))+3; totalCrew-=loss; morale-=7; addLog(`⚔️ Asian trade war! Lost ${loss}.`,true); return true; }
+            if(wp.conflictZone==="indigenous_americas" && Math.random()<0.38) { let loss=Math.floor(Math.random()*(totalCrew*0.18))+2; totalCrew-=loss; morale-=7; addLog(`🏹 Indigenous resistance! Lost ${loss}.`,true); return true; }
+            if(wp.conflictZone==="portuguese_africa" && currentCaptain!=="da Gama" && Math.random()<0.2) { let loss=Math.floor(Math.random()*(totalCrew*0.1))+1; totalCrew-=loss; addLog(`🇵🇹 Portuguese skirmish.`,true); return true; }
+            return false;
+        }
+        
         function tradeAndResupply() {
-            if(!gameActive || gameWin) return;
+            if(!gameActive||gameWin) return;
             const wp = waypoints.find(w=>w.id===currentWaypointId);
-            let supplyGain = 15 + Math.floor(Math.random() * 20);
-            let scurvyReduce = 30 + Math.floor(Math.random() * 25);
-            supply = Math.min(100, supply + supplyGain);
-            scurvy = Math.max(0, scurvy - scurvyReduce);
-            addLog(`🍊 Trading at ${wp.name}: fresh provisions gained. Supplies +${supplyGain}, Scurvy -${scurvyReduce}.`);
-            let conflictChance = 0.25;
-            if(wp.region === "India" || wp.name.includes("Calicut")) conflictChance = 0.45;
-            if(wp.tradeType === "Portuguese Factory" && currentCaptain !== "da Gama") conflictChance = 0.4;
-            if(Math.random() < conflictChance) {
-                let lossCrew = Math.floor(Math.random() * (totalCrew * 0.2)) + 2;
-                let lossShips = (Math.random() < 0.3 && ships>1) ? 1 : 0;
-                addLog(`⚔️ CONFLICT! Clash with local traders / Portuguese garrison. Lost ${lossCrew} men${lossShips>0?` and ${lossShips} ship(s)`:""}.`, true);
-                totalCrew -= lossCrew;
-                ships -= lossShips;
-                morale -= 8;
-                if(totalCrew <= 0 || ships<=0) gameActive = false;
-            } else {
-                addLog(`🤝 Peaceful trade, morale rises slightly.`);
-                morale = Math.min(100, morale + 3);
-            }
-            advanceDays(3);
-            updateUI();
-            refreshDecisions();
-            if(!gameActive) refreshDecisions();
+            let gain=15+Math.random()*20; supply=Math.min(100, supply+gain); scurvy=Math.max(0, scurvy-(30+Math.random()*25));
+            addLog(`🍊 Trade at ${wp.name}: +${Math.floor(gain)} supplies, scurvy reduced.`);
+            if(!resolveConflict(wp)) { morale=Math.min(100,morale+2); addLog(`🤝 Peaceful trade.`); }
+            advanceDays(3); updateUI(); refreshDecisions();
         }
         
-        // Travel between waypoints with distance, wind, storms
-        function travelTo(targetId) {
-            if (!gameActive || gameWin) return;
-            const fromWp = waypoints.find(w=>w.id===currentWaypointId);
-            const toWp = waypoints.find(w=>w.id===targetId);
-            if(!fromWp || !toWp) return;
-            const R=6371; const lat1=fromWp.lat*Math.PI/180, lat2=toWp.lat*Math.PI/180;
-            const dLat=(toWp.lat-fromWp.lat)*Math.PI/180, dLng=(toWp.lng-fromWp.lng)*Math.PI/180;
-            const a = Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2;
-            let dist = R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-            if(dist<80) dist=250;
-            let windEff = getFinalWindEffect(toWp);
-            let speed = 95 + (windEff*35);
-            speed = Math.max(45, Math.min(170, speed));
-            let days = Math.ceil(dist / speed);
-            days = Math.min(45, Math.max(3, days));
-            
-            let supplyLossBase = (days/20) * 0.9;
-            let windFactor = (windEff<0) ? (1+Math.abs(windEff)*0.7) : (1-windEff*0.3);
-            let supplyLoss = supplyLossBase * windFactor * 100;
-            let moraleChange = (windEff<0) ? -Math.abs(windEff)*8 : +2;
-            
-            supply -= supplyLoss;
-            morale += moraleChange;
-            let scurvyInc = days * 0.8;
-            scurvy += scurvyInc;
-            // Storm / ship loss
-            if(Math.random()<0.12 && ships>1) {
-                ships -= 1;
-                totalCrew -= Math.floor(totalCrew * 0.1);
-                addLog(`🌊 VIOLENT STORM! Lost one vessel. Remaining ships: ${ships}`, true);
-            }
-            if(scurvy>35 && Math.random()<0.2) {
-                let dead = Math.floor(totalCrew * 0.05)+1;
-                totalCrew -= dead;
-                addLog(`🩸 Scurvy worsens: ${dead} crew members die.`, true);
-            }
-            morale = Math.min(100, Math.max(0, morale));
-            supply = Math.min(100, Math.max(0, supply));
-            scurvy = Math.min(100, Math.max(0, scurvy));
-            totalCrew = Math.max(0, Math.floor(totalCrew));
-            if(totalCrew===0 || ships===0 || supply<=2 || morale<=3) gameActive=false;
-            
-            advanceDays(days);
-            currentWaypointId = targetId;
-            addLog(`Sailed from ${fromWp.name} to ${toWp.name} (${days} days). Supplies -${Math.floor(supplyLoss)}%, ${moraleChange>=0?"Morale up":"Morale down"}.`);
-            updateUI();
-            
-            const targetIds = voyages[currentCaptain].targetIds;
-            if(targetIds.includes(currentWaypointId)) victorySequence();
-            else if(gameActive) refreshDecisions();
-            else refreshDecisions();
+        function boostMorale() {
+            if(!gameActive||gameWin) return;
+            if(supply>=6) { let gain=12+Math.floor(Math.random()*10); morale=Math.min(100,morale+gain); supply-=6; addLog(`🎵 Inspiring speech! Morale +${gain}, supplies -6.`); advanceDays(1); }
+            else addLog(`❌ Not enough supplies.`,true);
+            updateUI(); refreshDecisions();
         }
         
         function treatScurvy() {
             if(!gameActive||gameWin) return;
-            if(supply>=12 && scurvy>15) {
-                supply -= 12;
-                scurvy = Math.max(0, scurvy-40);
-                morale += 5;
-                advanceDays(2);
-                addLog(`🍋 Issued lemon juice & herbs: Scurvy greatly reduced, morale improves.`);
-            } else {
-                addLog(`❌ Not enough supplies or scurvy low - cannot treat effectively.`, true);
-                return;
-            }
-            updateUI();
-            refreshDecisions();
-            if(!gameActive) refreshDecisions();
+            if(supply>=12 && scurvy>15) { supply-=12; scurvy=Math.max(0,scurvy-40); morale+=5; advanceDays(2); addLog(`🍋 Citrus treatment.`); }
+            else addLog(`❌ Cannot treat.`,true);
+            updateUI(); refreshDecisions();
         }
         
         function enforceDiscipline() {
             if(!gameActive||gameWin) return;
-            if(morale>=12) {
-                morale -= 5;
-                let success = Math.random()>0.3;
-                if(success) addLog(`📜 Strict discipline imposed. Mutiny risk reduced. Morale -5.`);
-                else {
-                    addLog(`⚠️ Harsh measures spark small riot! Crew lost.`, true);
-                    totalCrew -= Math.floor(totalCrew*0.07);
-                }
-                advanceDays(1);
-            } else addLog("Morale too low to enforce discipline.", true);
-            updateUI();
-            refreshDecisions();
-        }
-        
-        function victorySequence() {
-            gameWin=true; gameActive=false;
-            addLog(`🏆 VICTORY! ${currentCaptain} completes epic quest. ${voyages[currentCaptain].endMessage}`, false);
+            if(morale>=12) { morale-=5; if(Math.random()>0.3) addLog(`📜 Discipline enforced.`); else { addLog(`⚠️ Unrest! Crew lost.`,true); totalCrew-=Math.floor(totalCrew*0.07); } advanceDays(1); }
+            else addLog(`Morale too low.`,true);
             updateUI(); refreshDecisions();
         }
         
+        function travelTo(targetId) {
+            if(!gameActive||gameWin) return;
+            const from=waypoints.find(w=>w.id===currentWaypointId), to=waypoints.find(w=>w.id===targetId);
+            if(!from||!to) return;
+            const R=6371; const lat1=from.lat*Math.PI/180, lat2=to.lat*Math.PI/180;
+            const dLat=(to.lat-from.lat)*Math.PI/180, dLng=(to.lng-from.lng)*Math.PI/180;
+            const a=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2;
+            let dist=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)); if(dist<80) dist=250;
+            let windEff=getFinalWindEffect(to);
+            let speed = 85 + (windEff * 45);
+            speed = Math.max(38, Math.min(175, speed));
+            let days = Math.ceil(dist / speed);
+            days = Math.min(50, Math.max(3, days));
+            let supplyLossBase = (days/22) * 0.95;
+            let windFactor = (windEff<0) ? (1+Math.abs(windEff)*0.9) : (1 - windEff*0.4);
+            let supplyLoss = supplyLossBase * windFactor * 100;
+            let moraleChange = (windEff<0) ? -Math.abs(windEff)*10 : (windEff>0.1 ? 4 : 1);
+            supply -= supplyLoss;
+            morale += moraleChange;
+            scurvy += days * 0.85;
+            if(Math.random()<0.12 && ships>1) { ships--; totalCrew-=Math.floor(totalCrew*0.1); addLog(`🌊 Storm! Lost ship.`,true); }
+            if(scurvy>35 && Math.random()<0.2) { let dead=Math.floor(totalCrew*0.05)+1; totalCrew-=dead; addLog(`🩸 Scurvy kills ${dead}.`,true); }
+            morale=Math.min(100,Math.max(0,morale)); supply=Math.min(100,Math.max(0,supply)); scurvy=Math.min(100,Math.max(0,scurvy));
+            totalCrew=Math.max(0,Math.floor(totalCrew)); if(totalCrew===0||ships===0||supply<=2||morale<=3) gameActive=false;
+            advanceDays(days); currentWaypointId=targetId;
+            let windDesc = windEff>0.1 ? "fair winds" : (windEff<0 ? "adverse winds" : "moderate winds");
+            addLog(`Sailed ${from.name} → ${to.name} (${days}d). ${windDesc}. Supplies ${Math.floor(supplyLoss)}% loss. ${moraleChange>=0?"Morale up":"Morale down"}.`);
+            updateUI();
+            if(voyages[currentCaptain].targetIds.includes(currentWaypointId)) victorySequence();
+            else if(gameActive) refreshDecisions(); else refreshDecisions();
+        }
+        
+        function victorySequence() { gameWin=true; gameActive=false; addLog(`🏆 VICTORY! ${currentCaptain} ${voyages[currentCaptain].endMessage}`, false); updateUI(); refreshDecisions(); }
+        
         function refreshDecisions() {
-            const container = document.getElementById("decisionButtons");
-            const decisionDesc = document.getElementById("decisionText");
-            if(!gameActive || gameWin) {
-                decisionDesc.innerText = gameWin ? "✨ Voyage enshrined in history. Reset to sail anew." : "💀 Fleet destroyed or mutiny succeeded. Restart, captain.";
-                container.innerHTML = `<button id="resetFromFail">🔄 RESTART EXPEDITION</button>`;
-                const resetFail = document.getElementById("resetFromFail");
-                if(resetFail) resetFail.onclick = () => resetGame();
+            const container=document.getElementById("decisionButtons"), desc=document.getElementById("decisionText");
+            if(!gameActive||gameWin) {
+                desc.innerText=gameWin?"✨ Voyage complete. Reset.":"💀 Failed. Restart.";
+                container.innerHTML=`<button id="resetFromFail">🔄 RESTART</button>`;
+                document.getElementById("resetFromFail")?.addEventListener("click",()=>resetGame());
                 return;
             }
-            const currentWp = waypoints.find(w=>w.id===currentWaypointId);
-            let possible = waypoints.filter(wp => wp.id !== currentWaypointId && getDistance(currentWp, wp) < 4000).sort((a,b)=>getDistance(currentWp,a)-getDistance(currentWp,b)).slice(0,4);
+            const cur=waypoints.find(w=>w.id===currentWaypointId);
+            // Generate possible destinations: Include San Salvador from Canary Islands directly
+            let possible = waypoints.filter(wp => wp.id !== currentWaypointId && getDistance(cur, wp) < 4800).sort((a,b)=>getDistance(cur,a)-getDistance(cur,b));
+            
+            // Prioritize showing the correct historical route: from Canary (id=1) to San Salvador (id=2) is essential
+            if (currentCaptain === "Columbus" && currentWaypointId === 1) {
+                // Ensure San Salvador appears as a top option (can be duplicate, but filter ensures)
+                const salvador = waypoints.find(w=>w.id===2);
+                if (salvador && !possible.find(p=>p.id===2)) possible.unshift(salvador);
+            }
+            
+            possible = possible.slice(0, 5);
+            
             container.innerHTML = "";
-            possible.forEach(wp=>{
-                const btn = document.createElement("button");
-                let eff = getFinalWindEffect(wp);
-                btn.innerText = `⛵ Sail to ${wp.name} (${eff>=0?"Fair":"Rough"})`;
-                btn.onclick = ()=>travelTo(wp.id);
-                container.appendChild(btn);
+            possible.forEach(wp => { 
+                let btn = document.createElement("button"); 
+                let eff = getFinalWindEffect(wp); 
+                let windIcon = eff>=0.1?"🟢":(eff<0?"🔴":"🟡"); 
+                btn.innerText = `${windIcon} Sail to ${wp.name} (${eff>=0.1?"Good":(eff<0?"Rough":"Mixed")} winds)`;
+                btn.onclick = () => travelTo(wp.id); 
+                container.appendChild(btn); 
             });
-            const tradeBtn = document.createElement("button"); tradeBtn.innerText = "🤝 Trade / Resupply (risks conflict)"; tradeBtn.onclick = ()=>tradeAndResupply();
-            const healBtn = document.createElement("button"); healBtn.innerText = "🍋 Treat Scurvy (use supplies)"; healBtn.onclick = ()=>treatScurvy();
-            const orderBtn = document.createElement("button"); orderBtn.innerText = "⚔️ Enforce discipline / Quell unrest"; orderBtn.onclick = ()=>enforceDiscipline();
-            container.appendChild(tradeBtn);
-            container.appendChild(healBtn);
-            container.appendChild(orderBtn);
-            decisionDesc.innerText = `📍 ${currentWp.name} | Crew:${Math.floor(totalCrew)} Ships:${ships} | Scurvy:${Math.floor(scurvy)}% | Long voyages risk mutiny — choose wisely.`;
+            
+            let tradeBtn = document.createElement("button"); tradeBtn.innerText = "🤝 Trade / Resupply"; tradeBtn.onclick = tradeAndResupply;
+            let healBtn = document.createElement("button"); healBtn.innerText = "🍋 Treat Scurvy"; healBtn.onclick = treatScurvy;
+            let moraleBtn = document.createElement("button"); moraleBtn.innerText = "🎵 Boost Morale"; moraleBtn.onclick = boostMorale;
+            let orderBtn = document.createElement("button"); orderBtn.innerText = "⚔️ Enforce discipline"; orderBtn.onclick = enforceDiscipline;
+            container.appendChild(tradeBtn); container.appendChild(healBtn); container.appendChild(moraleBtn); container.appendChild(orderBtn);
+            
+            let windInfo = getWindDescription(cur);
+            desc.innerText = `📍 ${cur.name} (${cur.power}) | ${windInfo} | Morale:${Math.floor(morale)}% | Mutiny risk if <20%`;
         }
         
-        function getDistance(wp1,wp2){
-            const R=6371; const lat1=wp1.lat*Math.PI/180, lat2=wp2.lat*Math.PI/180;
-            const dLat=(wp2.lat-wp1.lat)*Math.PI/180, dLng=(wp2.lng-wp1.lng)*Math.PI/180;
-            const a=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2;
-            return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-        }
+        function getDistance(a,b){ const R=6371; const lat1=a.lat*Math.PI/180, lat2=b.lat*Math.PI/180; const dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180; const aa=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2; return R*2*Math.atan2(Math.sqrt(aa),Math.sqrt(1-aa)); }
         
         function resetGame() {
-            let choice = prompt("Choose your captain:\n1- Columbus (1492 westward)\n2- da Gama (1497 India)\n3- Amerigo (1501 New World)\n4- Magellan (1519 Circumnavigation)", "1");
-            let captainKey = "Columbus";
-            if(choice==="2") captainKey="da Gama";
-            else if(choice==="3") captainKey="Amerigo";
-            else if(choice==="4") captainKey="Magellan";
-            else captainKey="Columbus";
-            currentCaptain = captainKey;
-            const vdata = voyages[currentCaptain];
-            currentWaypointId = vdata.startId;
-            gameDate = new Date(vdata.startDate);
-            ships = vdata.startShips;
-            totalCrew = vdata.startCrew;
-            morale = 80;
-            supply = 85;
-            scurvy = 0;
-            gameActive = true;
-            gameWin = false;
-            const logDiv = document.getElementById("logMessages");
-            logDiv.innerHTML = `<div class="event-message">✨ New voyage! Captain ${currentCaptain}, ${totalCrew} crew, ${ships} ships. Date: ${formatDate(gameDate)}.</div>
-                                 <div class="event-message">✨ Beware scurvy, time pressure, mutiny, and trade conflicts with Portuguese/Arabs.</div>`;
-            updateUI();
-            refreshDecisions();
-            addLog(`Departing from ${waypoints.find(w=>w.id===currentWaypointId).name}. History awaits.`);
+            let choice = prompt("Choose your captain:\n1- Columbus (1492: Palos → Canary → San Salvador)\n2- da Gama (1497 India via Africa)\n3- Amerigo (1499 South America)\n4- Magellan (1519 Circumnavigation)", "1");
+            let cap = "Columbus"; if(choice==="2") cap="da Gama"; else if(choice==="3") cap="Amerigo"; else if(choice==="4") cap="Magellan";
+            currentCaptain = cap; const v = voyages[currentCaptain];
+            currentWaypointId = v.startId; gameDate = new Date(v.startDate); ships = v.startShips; totalCrew = v.startCrew;
+            morale = 80; supply = 85; scurvy = 0; gameActive = true; gameWin = false;
+            document.getElementById("logMessages").innerHTML = `<div class="event-message">✨ CORRECT ROUTE: Columbus sails from Canary Islands DIRECTLY to San Salvador (Bahamas). No Cape Verde stop.</div><div class="event-message">🌊 Dynamic winds: Trade winds stronger in winter (Nov-Mar), Monsoon reversal in Indian Ocean.</div>`;
+            updateUI(); refreshDecisions(); addLog(`Departing from ${waypoints.find(w=>w.id===currentWaypointId).name}. Fair winds, Captain!`);
         }
         
+        // ---------- MAP WITH FULL COLUMBUS ROUTE (Canary → San Salvador DIRECT) ----------
         function initMap() {
-            map = L.map('realMap').setView([28.0, -15.0], 4);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> & carto',
-                subdomains: 'abcd', maxZoom: 8, minZoom: 3
-            }).addTo(map);
-            waypoints.forEach(wp => {
-                L.circleMarker([wp.lat, wp.lng], {radius: 5, color: '#d4af37', fillColor: '#f0b27a', fillOpacity: 0.7})
-                .bindPopup(`<b>${wp.name}</b><br>${wp.region}<br>Winds:${wp.windZone}`).addTo(map);
+            map = L.map('realMap').setView([20, -40], 3);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CartoDB', subdomains:'abcd', maxZoom:8 }).addTo(map);
+            
+            // Columbus COMPLETE Route: Palos → Canary → DIRECT to San Salvador → Hispaniola
+            const columbusRoute = [[37.234,-6.896],[28.268,-15.606],[24.1,-74.5],[18.5,-69.9]];
+            L.polyline(columbusRoute, {color:'#e6b450', weight:5, opacity:0.95}).addTo(map).bindPopup('CORRECT Columbus Route 1492: Palos → Canary → DIRECTLY ACROSS ATLANTIC → San Salvador (Bahamas) → Hispaniola. NO Cape Verde stop.');
+            
+            const daGamaRoute = [[37.234,-6.896],[28.268,-15.606],[14.933,-23.513],[-34.358,18.471],[11.258,75.78]];
+            L.polyline(daGamaRoute, {color:'#c97e5a', weight:3, opacity:0.7, dashArray:'6, 8'}).addTo(map).bindPopup('da Gama Route to India');
+            
+            const magellanRoute = [[37.234,-6.896],[28.268,-15.606],[24.1,-74.5],[-53.5,-70.5],[0.789,127.381],[10.296,123.885]];
+            L.polyline(magellanRoute, {color:'#b5894b', weight:3, opacity:0.6, dashArray:'5, 8'}).addTo(map).bindPopup('Magellan Circumnavigation');
+            
+            const amerigoRoute = [[28.268,-15.606],[10.5,-67.5],[-34.9,-56.2]];
+            L.polyline(amerigoRoute, {color:'#7ca87c', weight:3, opacity:0.7}).addTo(map).bindPopup('Amerigo Vespucci 1499-1502: South American coast');
+            
+            // Wind zone labels
+            const windZones = [
+                { name: "🌬️ N.E. Trade Winds (Stronger Nov-Mar)", pos: [25, -35] }, { name: "🌬️ S.E. Trade Winds", pos: [-10, -30] }, 
+                { name: "🌊 Westerlies", pos: [45, -20] }, { name: "🌀 Roaring Forties (Winter: Jun-Aug)", pos: [-45, 20] },
+                { name: "☀️ Monsoon Reversal", pos: [5, 70] }, { name: "⛵ Doldrums (ITCZ)", pos: [2, -140] }
+            ];
+            windZones.forEach(z => {
+                L.marker(z.pos, { icon: L.divIcon({ className: 'wind-label', html: `<div style="background:#f7e9c3; padding:2px 8px; border-radius:20px; border:1px solid #b68b40; font-weight:bold; font-size:10px;">${z.name}</div>`, iconSize: [170,22] }) }).addTo(map);
             });
-            const startWp = waypoints.find(w=>w.id===currentWaypointId);
-            if(startWp) currentMarker = L.marker([startWp.lat, startWp.lng]).bindPopup("Start").addTo(map);
+            
+            waypoints.forEach(wp => { 
+                L.circleMarker([wp.lat, wp.lng], {radius:6, color:'#d4af37', fillColor:'#f0b27a', fillOpacity:0.9})
+                    .bindPopup(`<b>${wp.name}</b><br>${wp.windZone}<br>${wp.historicalNote || ''}`).addTo(map); 
+            });
+            resetGame();
         }
         
-        window.onload = () => {
-            initMap();
-            resetGame();
-            document.getElementById("resetGameBtn").addEventListener("click", ()=>resetGame());
-        };
+        window.onload = () => { initMap(); document.getElementById("resetGameBtn").addEventListener("click",()=>resetGame()); document.getElementById("toggleMusicBtn").addEventListener("click", toggleMusic); };
     })();
 </script>
 </body>
